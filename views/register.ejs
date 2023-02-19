@@ -1,0 +1,33 @@
+<style>
+    *{
+        font-size: 24px;
+        margin: 5px;
+    }
+  </style>
+<div class="container">
+<h1 style="font-size: 34px;">SignUp</h1>
+<%- include('./partials/messages') %>
+<form action="/users/register" method="post">
+        <div>
+            <input type="text" id="name" name="name" value="<%= typeof name != 'undefined' ? name : '' %>" placeholder="Name"/>
+        </div>
+        
+        <div>
+            <input type="email" id="email" name="email" value="<%= typeof email != 'undefined' ? email : '' %>" placeholder="E-Mail" />
+        </div>
+        <div>
+            <input type="password" id="password" name="password" placeholder="password"/>
+        </div>
+        <div>
+            <input type="password" id="password2" name="password2" placeholder="Repeat Passowrd" />
+        </div>
+        <div">
+            <button type="submit">Sign Up</button>
+            <p>
+                Have already an account?
+                <a href="/users/login" class="fw-bold text-body"><u>Login here</u></a>
+            </p>
+        </div>
+            
+</form>
+</div>
