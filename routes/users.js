@@ -3,27 +3,22 @@ const router = express.Router();
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const passport = require("passport");
-const {ensureAuthenticated} = require('../config/auth')
+
 // end-points
-router.get("/", (req, res) => res.render("home"));
-router.get("/users/login", (req, res) => res.render("login"));
-router.get("/users/register", (req, res) => res.render("register"));
-router.get("/dashboard", ensureAuthenticated, (req, res)=>res.render("dashboard"))
-
-
-
+router.get("/login", (req, res) => res.render("login"));
+router.get("/register", (req, res) => res.render("register"));
 
 
 
 // Registraion Handle
-router.post("/users/register", (req, res) => {
+router.post("/register", (req, res) => {
   const errors = [];
   const { name, email, password, password2 } = req.body;
 
   // form validation
   if (!name || !email || !password) {
     errors.push({ msg: "Fill in all fields" });
-  } else if (password.length < 2) {
+  } else if (password.length < 1) {
     errors.push({ msg: "Password should be atleast 8 characters long" });
   } else if (password !== password2) {
     errors.push({ msg: "Passwords do not match" });
@@ -63,15 +58,17 @@ router.post("/users/register", (req, res) => {
 });
 
 
-//          Login Handle
-router.post('/users/login', (req, res, next)=>{
+//       Local Strategy Login Handle
+router.post('/login', (req, res, next)=>{
   passport.authenticate("local", {
-    successRedirect: "/dashboard",
+    successRedirect: "/protected",
     failureRedirect: "/users/login",
     failureFlash: true,
   })
     (req, res, next);
 })
+
+
 
 // logout handle
 router.get('/logout', (req, res, next)=>{

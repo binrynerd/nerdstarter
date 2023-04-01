@@ -1,16 +1,13 @@
 const express = require('express');
-const expressLayouts = require('express-ejs-layouts');
+const app = express();
+require('dotenv').config();
+const session = require('express-session');
 const passport = require('passport');
 const mongoose = require('mongoose');
-const session = require('express-session');
 const flash = require('connect-flash');
-require('dotenv').config();
-const app = express();
-
-
-// Passport Config
-require('./config/passport')(passport);
-
+const expressLayouts = require('express-ejs-layouts');
+// Passport Configration
+require('./controllers/passport')(passport);
 
 // connection to MongoDB
 mongoose.set('strictQuery', false);
@@ -19,7 +16,6 @@ mongoose.connect(db, { useNewUrlParser: true }).then(() => {
     console.log('Database Connected . . .')
 }).catch((err) => console.log(err));
 
-
 // view engine
 app.use(expressLayouts);
 app.set('view engine', 'ejs')
@@ -27,13 +23,12 @@ app.set('view engine', 'ejs')
 // bodyparser
 app.use(express.urlencoded({ extended: true }))
 
-
 // Express session
 app.use(
     session({
       secret: 'middleware',
       resave: true,
-      saveUninitialized: true
+      saveUninitialized: true,
     })
   );
   
@@ -53,7 +48,8 @@ app.use(
   });
 
 //routes
-app.use('/', require('./routes/users'));
+app.use('/users', require('./routes/users'));
+app.use('/', require('./routes/index'))
 
 
 const port = process.env.port;
